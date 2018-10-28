@@ -1,0 +1,20 @@
+- name: Harry Ainsworth
+  title: CO-Founder
+  testimonial: "Quote 1"
+  image: img/item-img1.jpg
+- name: Sahib Bajwa
+  title: CO-Founder
+  testimonial: "Quote 2"
+  image: img/item-img1.jpg
+- name: Ayush Khanal
+  title: CO-Founder
+  testimonial: "Quote 3"
+  image: img/item-img1.jpg
+- name: Matthew Strong
+  title: CO-Founder
+  testimonial: "Quote 4"
+  image: img/item-img1.jpg
+- name: Satish Upadhyaya
+  title: CO-Founder
+  testimonial: "Quote 5"
+  image: img/item-img1.jpg
