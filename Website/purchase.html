@@ -43,6 +43,7 @@ permalink: /download/purchase/
                 var hardware_cost = 64.99;
                 var totalCost = (hardware_cost * quantity).toFixed(2);
                 document.getElementById("quantity-label").innerHTML = "Order Total: $" + totalCost;
+                console.log("Total Cost updated to " + totalCost);
               }
             </script>
           </form>
@@ -55,13 +56,13 @@ permalink: /download/purchase/
         <div class="block">
           <form>
             <div class="form-group">
-              <input type="text" class="form-control" name="name" placeholder="Your Name">
+              <input type="text" id="name" class="form-control" name="name" placeholder="Your Name">
             </div>
             <div class="form-group">
-              <input type="email" class="form-control" name="email" placeholder="Email Address">
+              <input type="email" id="email" class="form-control" name="email" placeholder="Email Address">
             </div>
             <div class="form-group">
-              <input type="text" class="form-control" name="phone-number" placeholder="Phone Number">
+              <input type="text" id="phone-number" class="form-control" name="phone-number" placeholder="Phone Number">
             </div>
             <div class="form-group">
               <label for="recieve-updates" class="checkbox-inline">
@@ -75,16 +76,16 @@ permalink: /download/purchase/
         <div class="block">
           <form>
             <div class="form-group">
-              <input type="text" class="form-control" name="address" placeholder="Street Address">
+              <input type="text" id="shipping-address" class="form-control" name="address" placeholder="Street Address">
             </div>
             <div class="form-group">
-              <input type="text" class="form-control" name="city" placeholder="City/Town">
+              <input type="text" id="shipping-city" class="form-control" name="city" placeholder="City/Town">
             </div>
             <div class="form-group">
-              <input type="text" class="form-control" name="state" placeholder="State">
+              <input type="text" id="shipping-state" class="form-control" name="state" placeholder="State">
             </div>
             <div class="form-group">
-              <input type="text" class="form-control" name="zip" placeholder="Zip Code">
+              <input type="text" id="shipping-zip" class="form-control" name="zip" placeholder="Zip Code">
             </div>
           </form>
         </div>
@@ -98,10 +99,10 @@ permalink: /download/purchase/
         <div class="block">
           <form>
             <div class="form-group">
-              <input type="text" class="form-control" name="address" placeholder="Street Address">
+              <input type="text" id="billing-address" class="form-control" name="address" placeholder="Street Address">
             </div>
             <div class="form-group">
-              <input type="text" class="form-control" name="city" placeholder="City/Town">
+              <input type="text" id="billing-city" class="form-control" name="city" placeholder="City/Town">
             </div>
           </form>
         </div>
@@ -110,10 +111,10 @@ permalink: /download/purchase/
         <div class="block">
           <form>
             <div class="form-group">
-              <input type="text" class="form-control" name="state" placeholder="State">
+              <input type="text" id="billing-state" class="form-control" name="state" placeholder="State">
             </div>
             <div class="form-group">
-              <input type="text" class="form-control" name="zip" placeholder="Zip Code">
+              <input type="text" id="billing-zip" class="form-control" name="zip" placeholder="Zip Code">
             </div>
           </form>
         </div>
@@ -122,7 +123,7 @@ permalink: /download/purchase/
         <div class="block">
           <form>
             <div class="form-group">
-              <input type="text" class="form-control" name="credit-card-number" placeholder="Credit Card Number">
+              <input type="text" id="credit-card-number" class="form-control" name="credit-card-number" placeholder="Credit Card Number">
             </div>
           </form>
         </div>
@@ -131,7 +132,7 @@ permalink: /download/purchase/
         <div class="block">
           <form>
             <div class="form-group">
-              <input type="date" class="form-control" name="exp-date" placeholder="Expiration Date">
+              <input type="date" id="exp-date" class="form-control" name="exp-date" placeholder="Expiration Date">
             </div>
           </form>
         </div>
@@ -140,7 +141,7 @@ permalink: /download/purchase/
         <div class="block">
           <form>
             <div class="form-group">
-              <input type="text" class="form-control" name="sec-code" placeholder="Security Code">
+              <input type="text" id="sec-code" class="form-control" name="sec-code" placeholder="Security Code">
             </div>
           </form>
         </div>
@@ -149,8 +150,46 @@ permalink: /download/purchase/
         <div class="block">
           <form>
             <div class="form-group" >
-              <input type="submit" class="form-control" name="submit" style="background-color: #2a79e0">
+              <button type="button"  class="form-control" name="submit" style="background-color: #2a79e0" onclick="submitData();">Submit</button>
             </div>
+            <script>
+              function submitData(){
+                var orderData = {};
+                orderData["quantity"] = document.getElementById("quantity").value;
+                orderData["name"] = document.getElementById("name").value;
+                orderData["email"] = document.getElementById("email").value;
+                orderData["phoneNumber"] = document.getElementById("phone-number").value;
+                orderData["shippingAddress"] = document.getElementById("shipping-address").value;
+                orderData["shippingCity"] = document.getElementById("shipping-city").value;
+                orderData["shippingState"] = document.getElementById("shipping-state").value;
+                orderData["shippingZip"] = document.getElementById("shipping-zip").value;
+                orderData["billingAddress"] = document.getElementById("billing-address").value;
+                orderData["billingCity"] = document.getElementById("billing-city").value;
+                orderData["billingState"] = document.getElementById("billing-state").value;
+                orderData["billingZip"] = document.getElementById("billing-zip").value;
+                orderData["cardNumber"] = document.getElementById("credit-card-number").value;
+                orderData["secNumber"] = document.getElementById("sec-code").value;
+                orderData["expDate"] = document.getElementById("exp-date").value;
+                var errorMessage = ""
+                for (key in orderData){
+                  //verify data has been entered for each field
+                  console.log(orderData[key]);
+                  if (orderData[key] == ""){
+                    errorMessage = "One or more fields were left blank."
+                  }
+                }
+                console.log(errorMessage);
+                if (errorMessage != ""){
+                  //display error message and prompt user to fix
+                  errorMessage += " Please review form and try again."
+                  document.getElementById('error-message').innerHTML = errorMessage;
+                }
+                else {
+                  // record data and go to order complete page
+                }
+              }
+            </script>
+            <label id="error-message" style="color: red"></label>
           </form>
         </div>
       </div>
