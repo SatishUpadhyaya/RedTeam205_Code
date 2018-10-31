@@ -1,6 +1,6 @@
 ---
 layout: page
-title: purchase
+title: Purchase
 permalink: /download/purchase/
 ---
 <!-- Slider Start -->
@@ -20,16 +20,35 @@ permalink: /download/purchase/
 <!-- purchase form start -->
 <section id="contact-form">
   <div class="container">
+    <h2>Order Information</h2>
+    <div class="row">
+      <div class="col-md-4 col-sm-12">
+        <div class="block">
+          <form>
+            <div class="form-group">
+              <input id="quantity" type="number" class="form-control" name="quantity" placeholder="Quantity" min="0">
+            </div>
+            <div class="form-group">
+              <input type="number" name="quantity-label" id="quantity-label">
+            </div>
+            <script type="text/javascript">
+                var hardware_cost = 100;
+                document.getElementById("quantity-label") = document.getElementById("quantity").value * hardware_cost;
+            </script>
+          </form>
+        </div>
+      </div>  
+    </div>
     <h2>Personal Information</h2>
     <div class="row">
-      <div class="col-md-6 col-sm-12">
+      <div class="col-md-4 col-sm-12">
         <div class="block">
           <form>
             <div class="form-group">
               <input type="text" class="form-control" name="name" placeholder="Your Name">
             </div>
             <div class="form-group">
-              <input type="text" class="form-control" name="email" placeholder="Email Address">
+              <input type="email" class="form-control" name="email" placeholder="Email Address">
             </div>
             <div class="form-group">
               <input type="text" class="form-control" name="phone-number" placeholder="Phone Number">
@@ -42,7 +61,7 @@ permalink: /download/purchase/
           </form>
         </div>
       </div>
-      <div class="col-md-6 col-sm-12">
+      <div class="col-md-8 col-sm-12">
         <div class="block">
           <form>
             <div class="form-group">
@@ -65,7 +84,57 @@ permalink: /download/purchase/
   <div class="container">
     <h2>Billing Information</h2>
     <div class="row">
-      
+      <div class="col-md-6 col-sm-12">
+        <div class="block">
+          <form>
+            <div class="form-group">
+              <input type="text" class="form-control" name="address" placeholder="Street Address">
+            </div>
+            <div class="form-group">
+              <input type="text" class="form-control" name="city" placeholder="City/Town">
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="col-md-6 col-sm-12">
+        <div class="block">
+          <form>
+            <div class="form-group">
+              <input type="text" class="form-control" name="state" placeholder="State">
+            </div>
+            <div class="form-group">
+              <input type="text" class="form-control" name="zip" placeholder="Zip Code">
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="col-sm-12">
+        <div class="block">
+          <form>
+            <div class="form-group">
+              <input type="text" class="form-control" name="credit-card-number" placeholder="Credit Card Number">
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="col-md-8 col-sm-12">
+        <div class="block">
+          <form>
+            <div class="form-group">
+              <input type="date" class="form-control" name="exp-date" placeholder="Expiration Date">
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="col-md-4 col-sm-12">
+        <div class="block">
+          <form>
+            <div class="form-group">
+              <input type="text" class="form-control" name="sec-code" placeholder="Security Code">
+            </div>
+          </form>
+        </div>
+      </div>
     </div>
   </div>
 </section>
