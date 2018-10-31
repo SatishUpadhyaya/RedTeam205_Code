@@ -16,3 +16,31 @@ permalink: /download/faq/
     </div>
   </div>
 </section>
+
+<section id="intro">
+	<div class="container">
+		<div class="row">
+			<div class="col-sm-12">
+				<div class="block">
+					{% for faq in site.data.faqs %}
+						<div class="section-title">
+							<h2>{{faq.question}}</h2>
+							<p>{{faq.answer}}</p>
+						</div>
+					{% endfor %}
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+<section id="feature">
+<div class="container">
+  <div class="row">
+    <div class="col-md-6 col-md-offset-6">
+      <p>Have a problem with Bike Buddy? Let us know about it by heading over to our contact page!</p>
+      <a href="{{ site.baseurl }}/contact" class="btn btn-view-works">Contact Us</a>
+    </div>
+  </div>
+</div>
+</section>
