@@ -50,7 +50,7 @@ permalink: /download/purchase/
         </div>
       </div>    
     </div>
-    <h2>Personal Information</h2>
+    <h2>Shipping Information</h2>
     <div class="row">
       <div class="col-md-4 col-sm-12">
         <div class="block">
@@ -173,19 +173,26 @@ permalink: /download/purchase/
                 var errorMessage = ""
                 for (key in orderData){
                   //verify data has been entered for each field
-                  console.log(orderData[key]);
                   if (orderData[key] == ""){
-                    errorMessage = "One or more fields were left blank."
+                    errorMessage = "One or more fields were left blank. "
+                    console.log("Field '" + key + "'' was left blank.")
                   }
                 }
-                console.log(errorMessage);
                 if (errorMessage != ""){
                   //display error message and prompt user to fix
-                  errorMessage += " Please review form and try again."
+                  errorMessage += "Please review form and try again."
                   document.getElementById('error-message').innerHTML = errorMessage;
                 }
                 else {
-                  // record data and go to order complete page
+                  // send post request to backend
+                  function sendPost() {
+                    $.ajax({
+                      type: "POST",
+                      url: 'http://ogre.adc4gis.com/',
+                      data: { json:JSON.stringify(orderData) },
+                      success: success
+                    });
+                  }
                 }
               }
             </script>
