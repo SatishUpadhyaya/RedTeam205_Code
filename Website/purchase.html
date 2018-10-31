@@ -26,18 +26,28 @@ permalink: /download/purchase/
         <div class="block">
           <form>
             <div class="form-group">
-              <input id="quantity" type="number" class="form-control" name="quantity" placeholder="Quantity" min="0">
+              <input id="quantity" type="number" oninput="updateCost(this.value)" class="form-control" name="quantity" placeholder="Quantity" min="0">
             </div>
+          </form>
+        </div>
+      </div>
+      <div class="col-md-4 col-sm-12">
+        <div class="block">
+          <form>
             <div class="form-group">
-              <input type="number" name="quantity-label" id="quantity-label">
+              <label id="quantity-label" class="form-group">Order Total: $0.00</label>
             </div>
-            <script type="text/javascript">
-                var hardware_cost = 100;
-                document.getElementById("quantity-label") = document.getElementById("quantity").value * hardware_cost;
+            <script>
+              // calculates the content of the quantity-label based on the quantity being purchased
+              function updateCost(quantity){
+                var hardware_cost = 64.99;
+                var totalCost = (hardware_cost * quantity).toFixed(2);
+                document.getElementById("quantity-label").innerHTML = "Order Total: $" + totalCost;
+              }
             </script>
           </form>
         </div>
-      </div>  
+      </div>    
     </div>
     <h2>Personal Information</h2>
     <div class="row">
