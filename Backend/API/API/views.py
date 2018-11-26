@@ -23,6 +23,8 @@ def createAcc(request):
     if username is None or password is None or email is None:
         return Response({'error': 'Please provide username password and email'},
                         status=HTTP_400_BAD_REQUEST)
+
+    
     try:
         user = User.objects.create_user(username, email, password)
         user.save()
