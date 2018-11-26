@@ -1,7 +1,7 @@
 # RedTeam205_Code: Bike Buddy
 
 
-Red Team 205's code for the CSCI 3308 (Software Development Metholodogies and Tools) Project.
+Red Team 205's code for the CSCI 3308 (Software Development Methodologies and Tools) Project.
 
 Written by:
 
