@@ -1,3 +1,16 @@
+How to run:
+cd to Backend directory
+$ source env/bin/activate
+$ cd API
+$ pip install -r requirements.txt
+$ python manage.py runserver
+
+
+
+
+
+
+
 List of all endpoints and associated JSON structures:
 superuser login:
 username: jptboy
