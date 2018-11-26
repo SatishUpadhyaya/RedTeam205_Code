@@ -24,7 +24,19 @@ def createAcc(request):
         return Response({'error': 'Please provide username password and email'},
                         status=HTTP_400_BAD_REQUEST)
 
-    
+    try:
+        testuser = User.objects.get(username = username)
+        return Response({'error': 'Account With Username Already Exists'},
+                        status=HTTP_400_BAD_REQUEST)
+    except User.DoesNotExist:
+        pass
+
+    try:
+        testuser = User.objects.get(email=email)
+        return Response({'error': 'Account With Username Already Exists'},
+                        status=HTTP_400_BAD_REQUEST)
+    except User.DoesNotExist:
+        pass
     try:
         user = User.objects.create_user(username, email, password)
         user.save()
@@ -50,10 +62,3 @@ def login(request):
     token, _ = Token.objects.get_or_create(user=user)
     return Response({'token': token.key},
 status=HTTP_200_OK)
-
-
-@csrf_exempt
-@api_view(["GET"])
-def sample_api(request):
-    data = {'sample_data': 123}
-    return Response(data, status=HTTP_200_OK)
