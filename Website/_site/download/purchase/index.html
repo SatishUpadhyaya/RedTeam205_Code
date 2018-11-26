@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html class="no-js">
+  <head>
+
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>Purchase</title>
+<meta name="description" content="">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+
+<!-- CSS -->
+<link rel="stylesheet" href="/BikeBuddy/css/owl.carousel.css" />
+<link rel="stylesheet" href="/BikeBuddy/css/bootstrap.min.css" />
+<link rel="stylesheet" href="/BikeBuddy/css/font-awesome.min.css" />
+<link rel="stylesheet" href="/BikeBuddy/css/airspace.css" />
+<link rel="stylesheet" href="/BikeBuddy/css/style.css" />
+<link rel="stylesheet" href="/BikeBuddy/css/ionicons.min.css" />
+<link rel="stylesheet" href="/BikeBuddy/css/animate.css" />
+<link rel="stylesheet" href="/BikeBuddy/css/responsive.css" />
+<link rel="stylesheet" href="/BikeBuddy/css/syntax.css" />
+
+<!-- Js -->
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="js/vendor/jquery-1.10.2.min.js"><\/script>')</script>
+<script src="/BikeBuddy/js/bootstrap.min.js"></script>
+<script src="/BikeBuddy/js/owl.carousel.min.js"></script>
+<script src="/BikeBuddy/js/plugins.js"></script>
+<script src="/BikeBuddy/js/min/waypoints.min.js"></script>
+<script src="/BikeBuddy/js/jquery.counterup.js"></script>
+
+
+<script src="/BikeBuddy/js/main.js"></script>
+
+<!--
+/*
+ * Airspace
+ * Ported to Jekyll by Andrew Lee
+ * https://github.com/ndrewtl/airspace-jekyll
+ * Designed and Developed by ThemeFisher
+ * https://themefisher.com/
+ *
+ */
+-->
+
+
+  </head>
+  <body>
+
+
+    <!-- Header Start -->
+<header>
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <!-- header Nav Start -->
+      <nav class="navbar navbar-default">
+        <div class="container-fluid">
+          <!-- Brand and toggle get grouped for better mobile display -->
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/BikeBuddy/">
+              <img src="/BikeBuddy/img/logo.png" alt="Logo">
+            </a>
+          </div>
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+              <ul class="nav navbar-nav navbar-right">
+                <li><a href="/BikeBuddy/">Home</a></li>
+                <li><a href="/BikeBuddy/blog">Blog and Updates</a></li>
+                <li><a href="/BikeBuddy/download/">Get Bike Buddy</a></li>
+                <li><a href="/BikeBuddy/contact">Contact</a></li>
+              </ul>
+            </div><!-- /.navbar-collapse -->
+          </div><!-- /.container-fluid -->
+        </nav>
+      </div>
+    </div>
+  </div>
+</header><!-- header close -->
+
+
+
+    <!-- Slider Start -->
+<section id="global-header">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="block">
+          <h1>Purchase</h1>
+          <p>Recieve the most advanced technology in bike security hardware.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- purchase form start -->
+<section id="contact-form">
+  <div class="container">
+    <h2>Order Information</h2>
+    <div class="row">
+      <div class="col-md-4 col-sm-12">
+        <div class="block">
+          <form>
+            <div class="form-group">
+              <input id="quantity" type="number" oninput="updateCost(this.value)" class="form-control" name="quantity" placeholder="Quantity" min="0">
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="col-md-4 col-sm-12">
+        <div class="block">
+          <form>
+            <div class="form-group">
+              <label id="quantity-label" class="form-group">Order Total: $0.00</label>
+            </div>
+            <script>
+              // calculates the content of the quantity-label based on the quantity being purchased
+              function updateCost(quantity){
+                var hardware_cost = 64.99;
+                var totalCost = (hardware_cost * quantity).toFixed(2);
+                document.getElementById("quantity-label").innerHTML = "Order Total: $" + totalCost;
+                console.log("Total Cost updated to " + totalCost);
+              }
+            </script>
+          </form>
+        </div>
+      </div>
+    </div>
+    <h2>Shipping Information</h2>
+    <div class="row">
+      <div class="col-md-4 col-sm-12">
+        <div class="block">
+          <form>
+            <div class="form-group">
+              <input type="text" id="name" class="form-control" name="name" placeholder="Your Name">
+            </div>
+            <div class="form-group">
+              <input type="email" id="email" class="form-control" name="email" placeholder="Email Address">
+            </div>
+            <div class="form-group">
+              <input type="text" id="phone-number" class="form-control" name="phone-number" placeholder="Phone Number">
+            </div>
+            <div class="form-group">
+              <label for="recieve-updates" class="checkbox-inline">
+                <input type="checkbox" class="form-control" name="recieve-updates" style="height:27px;width:27px;margin-top:10px;margin-left:280px" checked> <br />
+                <strong style="margin-left:-17px">I would like to recieve Bike Buddy updates!</strong>
+              </label>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="col-md-8 col-sm-12">
+        <div class="block">
+          <form>
+            <div class="form-group">
+              <input type="text" id="shipping-address" class="form-control" name="address" placeholder="Street Address">
+            </div>
+            <div class="form-group">
+              <input type="text" id="shipping-city" class="form-control" name="city" placeholder="City/Town">
+            </div>
+            <div class="form-group">
+              <input type="text" id="shipping-state" class="form-control" name="state" placeholder="State">
+            </div>
+            <div class="form-group">
+              <input type="text" id="shipping-zip" class="form-control" name="zip" placeholder="Zip Code">
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="container">
+    <h2>Billing Information</h2>
+    <div class="row">
+      <div class="col-md-6 col-sm-12">
+        <div class="block">
+          <form>
+            <div class="form-group">
+              <input type="text" id="billing-address" class="form-control" name="address" placeholder="Street Address">
+            </div>
+            <div class="form-group">
+              <input type="text" id="billing-city" class="form-control" name="city" placeholder="City/Town">
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="col-md-6 col-sm-12">
+        <div class="block">
+          <form>
+            <div class="form-group">
+              <input type="text" id="billing-state" class="form-control" name="state" placeholder="State">
+            </div>
+            <div class="form-group">
+              <input type="text" id="billing-zip" class="form-control" name="zip" placeholder="Zip Code">
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="col-sm-12">
+        <div class="block">
+          <form>
+            <div class="form-group">
+              <input type="text" id="credit-card-number" class="form-control" name="credit-card-number" placeholder="Credit Card Number">
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="col-md-8 col-sm-12">
+        <div class="block">
+          <form>
+            <div class="form-group">
+              <input type="date" id="exp-date" class="form-control" name="exp-date" placeholder="Expiration Date">
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="col-md-4 col-sm-12">
+        <div class="block">
+          <form>
+            <div class="form-group">
+              <input type="text" id="sec-code" class="form-control" name="sec-code" placeholder="Security Code">
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="col-sm-12">
+        <div class="block">
+          <form>
+            <div class="form-group" >
+              <button type="button"  class="form-control" name="submit" style="background-color: #2a79e0" onclick="submitData();">Submit</button>
+            </div>
+            <script>
+              function submitData(){
+                var orderData = {};
+                orderData["quantity"] = document.getElementById("quantity").value;
+                orderData["name"] = document.getElementById("name").value;
+                orderData["email"] = document.getElementById("email").value;
+                orderData["phoneNumber"] = document.getElementById("phone-number").value;
+                orderData["shippingAddress"] = document.getElementById("shipping-address").value;
+                orderData["shippingCity"] = document.getElementById("shipping-city").value;
+                orderData["shippingState"] = document.getElementById("shipping-state").value;
+                orderData["shippingZip"] = document.getElementById("shipping-zip").value;
+                orderData["billingAddress"] = document.getElementById("billing-address").value;
+                orderData["billingCity"] = document.getElementById("billing-city").value;
+                orderData["billingState"] = document.getElementById("billing-state").value;
+                orderData["billingZip"] = document.getElementById("billing-zip").value;
+                orderData["cardNumber"] = document.getElementById("credit-card-number").value;
+                orderData["secNumber"] = document.getElementById("sec-code").value;
+                orderData["expDate"] = document.getElementById("exp-date").value;
+                var errorMessage = ""
+                for (key in orderData){
+                  //verify data has been entered for each field
+                  if (orderData[key] == ""){
+                    errorMessage = "One or more fields were left blank. "
+                    console.log("Field '" + key + "'' was left blank.")
+                  }
+                }
+                if (errorMessage != ""){
+                  //display error message and prompt user to fix
+                  errorMessage += "Please review form and try again."
+                  document.getElementById('error-message').innerHTML = errorMessage;
+                }
+                else {
+                  // send post request to backend
+                  function sendPost() {
+                    $.ajax({
+                      type: "POST",
+                      url: 'http://ogre.adc4gis.com/',
+                      data: { json:JSON.stringify(orderData) },
+                      success: success
+                    });
+                  }
+                }
+              }
+            </script>
+            <label id="error-message" style="color: red"></label>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+
+
+
+
+
+
+
+
+    <!-- footer Start -->
+<footer>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="footer-manu">
+          <ul>
+            <li><a href="/BikeBuddy/">Home</a></li>
+            <li><a href="/BikeBuddy/blog">Blog and Updates</a></li>
+            <li><a href="/BikeBuddy/download/">Get Bike Buddy</a></li>
+            <li><a href="/BikeBuddy/contact">Contact</a></li>
+          </ul>
+        </div>
+      <p>Copyright &copy; Design &amp; Developed by <a href="http://www.themefisher.com">Themefisher</a>. All rights reserved. Edited by Bike Buddy</p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+    </body>
+</html>
