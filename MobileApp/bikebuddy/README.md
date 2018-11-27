@@ -1,8 +1,5 @@
-# bikebuddy
+# Bike Buddy Mobile Application
 
-A new Flutter project.
+Flutter App for Bike Buddy.
 
-## Getting Started
-
-For help getting started with Flutter, view our online
-[documentation](https://flutter.io/).
+[Flutter Website ](https://flutter.io/).
