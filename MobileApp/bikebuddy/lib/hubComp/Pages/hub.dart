@@ -1,5 +1,51 @@
 import 'package:flutter/material.dart';
 
+Widget BikeProfile(String bikeName){
+	return new Container(
+		padding: const EdgeInsets.all(10.0),
+		child: new Card(
+			color: Colors.blue,
+			child: new Row(
+				children: <Widget> [
+					// bike icon
+					new Container(
+						padding: const EdgeInsets.all(10.0),
+						child: new IconButton(
+							icon: new Icon(Icons.directions_bike),
+						),
+					),
+					// bike name
+					new Container(
+						padding: const EdgeInsets.all(10.0),
+						child: new Text(
+							bikeName,
+							style: TextStyle(
+								fontWeight: FontWeight.bold,
+								fontSize: 14.0,
+								color: Colors.white,
+							)
+						),
+					),	
+					// lock button
+					new Container(
+						padding: const EdgeInsets.all(10.0),
+						child: new IconButton(
+							icon: new Icon(Icons.lock),
+						),
+										),
+					// delete button
+					new Container(
+						padding: const EdgeInsets.all(10.0),
+						child: new IconButton(
+							icon: new Icon(Icons.delete),
+						),
+					),
+				]
+			)
+		)
+	);
+}
+
 class HubPage extends StatefulWidget{
   @override
   State createState() => new HomePageState();
@@ -50,90 +96,9 @@ class HomePageState extends State<HubPage>{
 								)
 							),
 							// bike sample card 
-							new Container(
-								padding: const EdgeInsets.all(10.0),
-								child: new Card(
-									color: Colors.blue,
-									child: new Row(
-										children: <Widget> [
-											// bike icon
-											new Container(
-												padding: const EdgeInsets.all(10.0),
-												child: new IconButton(
-													icon: new Icon(Icons.directions_bike),
-												),
-											),
-											// bike name
-											new Container(
-												padding: const EdgeInsets.all(10.0),
-												child: new Text(
-													"<bikename>",
-													style: TextStyle(
-														fontWeight: FontWeight.bold,
-														fontSize: 14.0,
-														color: Colors.white,
-													)
-												),
-											),
-											// lock button
-											new Container(
-												padding: const EdgeInsets.all(10.0),
-												child: new IconButton(
-													icon: new Icon(Icons.lock),
-												),
-											),
-											// delete button
-											new Container(
-												padding: const EdgeInsets.all(10.0),
-												child: new IconButton(
-													icon: new Icon(Icons.delete),
-												),
-											),
-											
-										]
-									)
-								)
-							),
+							BikeProfile("MyBitchinBike"),
 							// bike sample card 
-							new Container(
-								padding: const EdgeInsets.all(10.0),
-								child: new Card(
-									color: Colors.blue,
-									child: new Row(
-										children: <Widget> [
-											new Container(
-												padding: const EdgeInsets.all(10.0),
-												child: new IconButton(
-													icon: new Icon(Icons.directions_bike),
-												),
-											),
-											new Container(
-												padding: const EdgeInsets.all(10.0),
-												child: new Text(
-													"<bikenameislonger>",
-													style: TextStyle(
-														fontWeight: FontWeight.bold,
-														fontSize: 14.0,
-														color: Colors.white,
-													)
-												),
-											),
-											new Container(
-												padding: const EdgeInsets.all(10.0),
-												child: new IconButton(
-													icon: new Icon(Icons.lock),
-												),
-											),
-											new Container(
-												padding: const EdgeInsets.all(10.0),
-												child: new IconButton(
-													icon: new Icon(Icons.delete),
-												),
-											),
-										]
-									)
-								)
-							)
+							BikeProfile("🅱️ike")
 						]
 					)
 				]
