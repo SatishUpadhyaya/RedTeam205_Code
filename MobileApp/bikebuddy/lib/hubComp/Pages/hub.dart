@@ -88,7 +88,7 @@ class HomePageState extends State<HubPage>{
               			),
             		),
 					
-					new Column (
+					new ListView (
 						children: <Widget> [
 							// bike sample card 
 							BikeProfile("MyBitchinBike"),
