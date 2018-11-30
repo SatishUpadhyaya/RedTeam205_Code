@@ -6,6 +6,8 @@
 
 
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:async';
 
 
 
@@ -18,8 +20,15 @@ class HomePageState extends State<HubPage>{
 
 
 	// hard-coded list of bike names for debugging
-	List<String> _bikeList = ["MyBitchinBike", "🅱️ike", "MyBitchinBike2", "🅱️ike2", "MyBitchinBike3", "🅱️ike3", "MyBitchinBike4", "🅱️ike4"];
-	String _firstName = "Harry";
+	List<String> _bikeList = ["MyBitchinBike", "🅱️ike", "MyBitchinBike2", "🅱️ike2"];
+	String _username = "<username>";
+
+	Future<String> _getBikesRequest() async {
+		String url = "http://bikebuddy.udana.systems/bikes";
+		var response = await http.get(Uri.encodeFull(url), headers: {"Accept": "application/json"});
+		print(response.body);
+
+	}
 
 	Widget _BikeProfile(String bikeName){
 		/*
@@ -31,53 +40,111 @@ class HomePageState extends State<HubPage>{
 			padding: const EdgeInsets.all(10.0),
 			child: new Card(
 				color: Colors.blue,
-				child: new Row(
-					children: <Widget> [
-						// bike icon
-						new Container(
-							padding: const EdgeInsets.all(10.0),
-							child: new IconButton(
-								icon: new Icon(Icons.directions_bike),
-								color: Colors.blue[800],
-								onPressed: (){
-        							print("Bike info button pressed");
-        						}
-							),
+				child: new Column(
+					children: <Widget>[
+						// header and buttons
+						new Row(
+							children: <Widget>[
+								// bike icon
+								new Container(
+									padding: const EdgeInsets.all(10.0),
+									child: new IconButton(
+										icon: new Icon(Icons.directions_bike),
+										color: Colors.blue[800],
+										onPressed: (){}
+									),
+								),
+								// bike name
+								new Container(
+									padding: const EdgeInsets.all(10.0),
+									child: new Text(
+										bikeName,
+										style: TextStyle(
+											fontWeight: FontWeight.bold,
+											fontSize: 14.0,
+											color: Colors.white,
+										)
+									),
+								),	
+								// lock button
+								new Container(
+									padding: const EdgeInsets.all(10.0),
+									child: new IconButton(
+										icon: new Icon(Icons.lock),
+										color: Colors.blue[800],
+										onPressed: (){
+		        							print("Lock button pressed");
+		        						}
+									),
+													),
+								// delete button
+								new Container(
+									padding: const EdgeInsets.all(10.0),
+									child: new IconButton(
+										icon: new Icon(Icons.delete),
+										color: Colors.blue[800],
+										onPressed: (){
+		        							print("Delete button pressed");
+		        						}
+									),
+								),
+							]
 						),
-						// bike name
-						new Container(
-							padding: const EdgeInsets.all(10.0),
-							child: new Text(
-								bikeName,
-								style: TextStyle(
-									fontWeight: FontWeight.bold,
-									fontSize: 14.0,
-									color: Colors.white,
-								)
-							),
-						),	
-						// lock button
-						new Container(
-							padding: const EdgeInsets.all(10.0),
-							child: new IconButton(
-								icon: new Icon(Icons.lock),
-								color: Colors.blue[800],
-								onPressed: (){
-        							print("Lock button pressed");
-        						}
-							),
-											),
-						// delete button
-						new Container(
-							padding: const EdgeInsets.all(10.0),
-							child: new IconButton(
-								icon: new Icon(Icons.delete),
-								color: Colors.blue[800],
-								onPressed: (){
-        							print("Delete button pressed");
-        						}
-							),
-						),
+						// map and State
+						new Card(
+							color: Colors.white,
+							child: new Row(
+								children: <Widget>[
+									// state label
+									new Container(
+										padding: const EdgeInsets.all(10.0),
+										child: new Column(
+											children: <Widget>[
+												new Text(
+													"Current State:",
+													style: TextStyle(fontWeight: FontWeight.bold)
+												),
+												new Text("Locked"),
+												new Padding(
+							                        padding: const EdgeInsets.only(top: 10.0),
+							                    ),
+												new Text(
+													"Latitude:",
+													style: TextStyle(fontWeight: FontWeight.bold)
+												),
+												new Text("40.0076° N"),
+												new Padding(
+							                        padding: const EdgeInsets.only(top: 10.0),
+							                    ),
+												new Text(
+													"Longitude:",
+													style: TextStyle(fontWeight: FontWeight.bold)
+												),
+												new Text("105.2659° W")
+											]
+										)
+									),
+									// location
+									new Container(
+										padding: const EdgeInsets.all(10.0),
+										child: new Card(
+											color: Colors.black,
+											child: new Container(
+												padding: const EdgeInsets.fromLTRB(55.0, 100.0, 55.0, 100.0),
+												child: new Text(
+													"MAP PLACEHOLDER",
+													style: TextStyle(
+														fontWeight: FontWeight.bold,
+														fontSize: 14.0,
+														color: Colors.white,
+													)
+												),
+											)
+										)
+									)
+								]
+							)
+						)
 					]
 				)
 			)
@@ -101,7 +168,7 @@ class HomePageState extends State<HubPage>{
 		return new Scaffold(
 			appBar: AppBar(
 				title: new Text(
-					"Welcome, " + _firstName + "!",
+					"Welcome, " + _username + "!",
 					style: TextStyle(
 						fontWeight: FontWeight.bold,
 						fontSize: 30.0,
@@ -113,6 +180,7 @@ class HomePageState extends State<HubPage>{
 						color: Colors.blue[800],
 						icon: Icon(Icons.person),
 						onPressed: (){
+							
         					print("User profile button pressed");
         				}
 					)
@@ -141,7 +209,7 @@ class HomePageState extends State<HubPage>{
 				backgroundColor: Colors.white,
         		child: new Icon(
         			Icons.add,
-        			color: Colors.blue,
+        			color: Colors.blue[800],
         		),
         		onPressed: (){
         			print("Add button pressed");
