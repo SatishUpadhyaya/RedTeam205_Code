@@ -1,8 +1,58 @@
-// placeholder
 import 'package:flutter/material.dart';
-//import 'package:http/http.dart' as http;
+import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
+import '../../hubComp/Pages/hub.dart';
+
+Future<void> getPost(BuildContext context, dynamic email, dynamic password) async
+{
+  var bodyText = {"username":email.toString(),"password":password.toString()};
+  // var bodyTextJson = json.encode(bodyText);
+
+  final res = await http.post('https://bikebuddy.udana.systems/api/login', body: bodyText,);
+
+  var resDecode = json.decode(res.body);
+  print("JWT TOKEN BELOW:");
+  print(resDecode);
+  print("RES CODE BELOW:");
+  print("${res.statusCode}");
+
+  if(res.statusCode == 200)
+  {
+    //should pass at least the resDecode to the HubPage()
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => new HubPage()),
+    );
+  }
+  else
+  {
+    return showDialog<Null>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return new AlertDialog(
+          title: new Text('Login Attempt Failed!'),
+          content: new SingleChildScrollView(
+            child: new ListBody(
+              children: <Widget>[
+                new Text('Invalid Username or Password'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            new FlatButton(
+              child: new Text('Try Again'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+}
 
 class LoginPage extends StatefulWidget{
   @override
@@ -15,11 +65,6 @@ class LoginPageState extends State<LoginPage> with SingleTickerProviderStateMixi
   Animation<double> _iconAnimation;
   String userName = "";
   String userPassword = "";
-
-
-
-
-
 
   // some code for taking care of the desired animations 
   @override
@@ -135,7 +180,7 @@ class LoginPageState extends State<LoginPage> with SingleTickerProviderStateMixi
                           ),),
                         onPressed: () {
                           // function to post user credentials to API
-                          //getPost(context, userCompany.toString(), userPassword.toString());
+                          getPost(context, userName.toString(), userPassword.toString());
                         },
                         splashColor: Colors.black,
                       ),
