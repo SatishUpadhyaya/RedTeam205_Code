@@ -22,7 +22,7 @@ Future<void> getPost(BuildContext context, dynamic email, dynamic password) asyn
     //should pass at least the resDecode to the HubPage()
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => new HubPage()),
+      MaterialPageRoute(builder: (context) => new HubPage(resDecode)),
     );
   }
   else
