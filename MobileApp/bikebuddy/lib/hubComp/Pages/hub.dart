@@ -17,9 +17,47 @@ Future<dynamic> getBikesRequest(var tokenMane) async {
 		print(response.body);
 
     Map<dynamic, dynamic> respD = json.decode(response.body);
-    print(respD["Bikes"]);
+    print(respD["Bikes"][0]);
 
-    return respD["Bikes"];
+    return respD["Bikes"][0];
+	}
+
+  Future<void> putBikeState(var tokenMane) async {
+    // print("Got:" + tokenMane["token"].toString());
+		String url = "http://bikebuddy.udana.systems/bikes";
+    String secURL = "http://bikebuddy.udana.systems/bikes/changeBike";
+    var header = {"Authorization":"Token "+tokenMane["token"]};
+    print(header);
+
+		var response = await http.get(Uri.encodeFull(url), headers: header);
+		print(response.body);
+
+    Map<dynamic, dynamic> respD = json.decode(response.body);
+    
+    var bikeName = respD["Bikes"][0]["Name"];
+    var bikeState = respD["Bikes"][0]["State"];
+    dynamic latLng = respD["Bikes"][0]["LatLng"];
+
+    print(bikeName);
+    print(bikeState);
+    print(latLng);
+
+    if(bikeState == "armed")
+    {
+      //put state as disarmed
+      var bod = {"Name":bikeName.toString(),"lat":latLng[0].toDouble(),"lng":latLng[1].toDouble(),"state":"disarmed"};
+      print(bod);
+      await http.put(Uri.encodeFull(secURL), body: json.encode(bod), headers: header);
+      print("State changed to disarmed");
+    }
+    else
+    {
+      //put state as armed
+      var bod = {"Name":bikeName.toString(),"lat":latLng[0].toDouble(),"lng":latLng[1].toDouble(),"state":"armed"};
+      print(bod);
+      await http.put(Uri.encodeFull(secURL), body: json.encode(bod), headers: header);
+      print("State changed to armed");
+    }
 	}
 
 class HubPage extends StatefulWidget{
@@ -33,7 +71,7 @@ class HubPage extends StatefulWidget{
 class HomePageState extends State<HubPage>{
   final tokenMane;
   HomePageState(this.tokenMane);
-  LatLng posOf = LatLng(40.007292799999995, -105.26328649999999);
+  LatLng posOf = LatLng(10.22, 10.22);
 
 	@override 
 	Widget build(BuildContext context){
@@ -42,7 +80,9 @@ class HomePageState extends State<HubPage>{
 
     //-------------------------------------------------------------- Zero Card ---------------------------------------------------
     var zeroCard = new RawMaterialButton(
-      onPressed: () {},
+      onPressed: () {
+        putBikeState(tokenMane);
+      },
     
         child: new Icon(
           Icons.lock_open,
@@ -92,7 +132,6 @@ class HomePageState extends State<HubPage>{
 
     cardList.add(sizedBox);
 //----------------------------------------------------------- ^^ First Card ^^ ------------------------------------------------
-
 
 		return new Scaffold(
       appBar: new AppBar(
