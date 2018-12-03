@@ -10,6 +10,9 @@ import './maps.dart';
 // function to use the readings from the gps sensor to determine the placement on the map for the user's bike.
 
 Future<void> updatePosition(var token) async{
+  // based on position from api, update the google map and 
+  // google map controller.
+  
 
 }
 
@@ -31,8 +34,6 @@ Future<dynamic> getBikesRequest(var token) async {
       return 0;
     }
 	}
-
-
 
 Future<void> putBikeState(var token) async {
   // print("Got:" + tokenMane["token"].toString());
@@ -84,14 +85,34 @@ class HomePageState extends State<HubPage>{
   final token;
   String name = "";
   bool nameFound = false;
-  void fixName(newName){
+  bool locked = false;
+  void fixName(bike){
     if(!nameFound){
+      // first time getting stats of the bike
       setState(() {
-          name = newName;
+          name = bike["Name"];
+          String status = bike["State"];
+          if(status == "armed"){
+            locked = true;
+
+          }
+          else{
+            locked = false;
+
+          }
           nameFound = true;
         });
     }
     
+  }
+  // function to switch the color of the lock based on the when the user presses their option.  
+  void switchLock(){
+    setState(() { 
+      locked = !locked;
+        });
+    // siwtching up locked feature on the state of the widget
+
+
   }
   HomePageState(this.token);
   LatLng posOf = LatLng(10.22, 10.22);
@@ -101,7 +122,7 @@ class HomePageState extends State<HubPage>{
 
     List<Widget> bikeItems = [];
     Future<dynamic> future = getBikesRequest(token);
-    future.then((value) => fixName(value["Name"]));
+    future.then((value) => fixName(value));
     // do the changing of the name in fixname if the bike name hasn't been changed
   
     //-------------------------------------------------------------- Zero Card ---------------------------------------------------
@@ -109,16 +130,22 @@ class HomePageState extends State<HubPage>{
       onPressed: () {
         // locking vs unlocking bike
         putBikeState(token);
+        // change state
+        switchLock();
+
       },
+
         child: new Icon(
-          Icons.lock_open,
+
+          this.locked ? Icons.lock : Icons.lock_open,
           //Icons.lock,
           color: Colors.white,
           size: 150.0,
         ),
         shape: new CircleBorder(),
         elevation: 2.0,
-        fillColor: Colors.green,
+        fillColor: this.locked ? Colors.red : Colors.green,
+        splashColor: this.locked ? Colors.red[100]: Colors.green[100],
         // fillColor: Colors.red,
         padding: const EdgeInsets.all(30.0),
     );
@@ -152,7 +179,6 @@ class HomePageState extends State<HubPage>{
     );
 
     bikeItems.add(sizedBox);
-
 
 
 		return new Scaffold(
