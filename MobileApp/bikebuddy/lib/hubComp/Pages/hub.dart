@@ -9,14 +9,15 @@ import './maps.dart';
 
 // function to use the readings from the gps sensor to determine the placement on the map for the user's bike.
 
+Future<void> updatePosition(var token) async{
 
-
+}
 
 // get the bikes that this current user has upon login
 Future<dynamic> getBikesRequest(var token) async {
     // print("Got:" + tokenMane["token"].toString());
 		String url = "https://bikebuddy.udana.systems/bikes";
-    var header = {"Authorization":"Token "+token["token"],
+    var header = {"Authorization":"Token "+ token["token"],
     "Accept": "application/json",
     "content-type": "application/json"};
 		var response = await http.get(Uri.encodeFull(url), headers: header);
@@ -30,6 +31,8 @@ Future<dynamic> getBikesRequest(var token) async {
       return 0;
     }
 	}
+
+
 
 Future<void> putBikeState(var token) async {
   // print("Got:" + tokenMane["token"].toString());
@@ -75,26 +78,41 @@ class HubPage extends StatefulWidget{
   State createState() => new HomePageState(token);
 }
 
+
+
 class HomePageState extends State<HubPage>{
   final token;
+  String name = "";
+  bool nameFound = false;
+  void fixName(newName){
+    if(!nameFound){
+      setState(() {
+          name = newName;
+          nameFound = true;
+        });
+    }
+    
+  }
   HomePageState(this.token);
   LatLng posOf = LatLng(10.22, 10.22);
 
 	@override 
 	Widget build(BuildContext context){
 
-    List<Widget> cardList = [];
-
+    List<Widget> bikeItems = [];
+    Future<dynamic> future = getBikesRequest(token);
+    future.then((value) => fixName(value["Name"]));
+    // do the changing of the name in fixname if the bike name hasn't been changed
+  
     //-------------------------------------------------------------- Zero Card ---------------------------------------------------
-    var zeroCard = new RawMaterialButton(
+    var lockButton = new RawMaterialButton(
       onPressed: () {
         // locking vs unlocking bike
         putBikeState(token);
       },
-    
         child: new Icon(
           Icons.lock_open,
-          // Icons.lock,
+          //Icons.lock,
           color: Colors.white,
           size: 150.0,
         ),
@@ -105,15 +123,22 @@ class HomePageState extends State<HubPage>{
         padding: const EdgeInsets.all(30.0),
     );
 
-    final zeroSizedBox = new Container(
+    final lockButtonContainer = new Container(
       margin: new EdgeInsets.only(top: 10.0, left: 10.0, right: 10.0),
-      child: new SizedBox(child: zeroCard,)
+      child: new SizedBox(child: lockButton)
     );
 
-    cardList.add(zeroSizedBox);
-//----------------------------------------------------------- ^^ Zero Card ^^ ------------------------------------------------
+    bikeItems.add(lockButtonContainer);
+    // container 
+    var bikeMapLabel = new Text(name, style: TextStyle(color: Colors.black, fontSize: 20.0),);
 
-//-------------------------------------------------------------- First Card ---------------------------------------------------
+    final bikeMapLabelContainer = new Container(
+      margin: new EdgeInsets.only(top: 10.0, left: 10.0, right: 10.0),
+      child: new SizedBox(child: bikeMapLabel)
+
+    );
+    bikeItems.add(bikeMapLabelContainer);
+
     var card = new Card(
       child: InkWell(
         splashColor: Colors.green,
@@ -123,17 +148,17 @@ class HomePageState extends State<HubPage>{
 
     final sizedBox = new Container(
       margin: new EdgeInsets.only(top: 10.0, left: 10.0, right: 10.0),
-      child: new SizedBox(child: card,)
+      child: new SizedBox(child: card)
     );
 
-    cardList.add(sizedBox);
-//----------------------------------------------------------- ^^ First Card ^^ ------------------------------------------------
+    bikeItems.add(sizedBox);
+
+
 
 		return new Scaffold(
       appBar: new AppBar(
             title: new Text("Bike Buddy"),
       ),
-
        drawer: new Drawer(
         child: new ListView(
           children: <Widget> [
@@ -171,7 +196,7 @@ class HomePageState extends State<HubPage>{
         fit: StackFit.expand,
         children: <Widget>[
           new Column(
-            children: cardList,
+            children: bikeItems,
           ),
           
         ]
