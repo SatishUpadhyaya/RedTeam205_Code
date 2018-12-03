@@ -7,11 +7,20 @@ import '../../landingComp/Pages/login.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import './maps.dart';
 
+// function to use the readings from the gps sensor to determine the placement on the map for the user's bike.
+
+Future<void> updatePosition(var token) async{
+  // based on position from api, update the google map and 
+  // google map controller.
+  
+
+}
+
 // get the bikes that this current user has upon login
 Future<dynamic> getBikesRequest(var token) async {
     // print("Got:" + tokenMane["token"].toString());
 		String url = "https://bikebuddy.udana.systems/bikes";
-    var header = {"Authorization":"Token "+token["token"],
+    var header = {"Authorization":"Token "+ token["token"],
     "Accept": "application/json",
     "content-type": "application/json"};
 		var response = await http.get(Uri.encodeFull(url), headers: header);
@@ -70,45 +79,93 @@ class HubPage extends StatefulWidget{
   State createState() => new HomePageState(token);
 }
 
+
+
 class HomePageState extends State<HubPage>{
   final token;
+  String name = "";
+  bool nameFound = false;
+  bool locked = false;
+  void fixName(bike){
+    if(!nameFound){
+      // first time getting stats of the bike
+      setState(() {
+          name = bike["Name"];
+          String status = bike["State"];
+          if(status == "armed"){
+            locked = true;
+
+          }
+          else{
+            locked = false;
+
+          }
+          nameFound = true;
+        });
+    }
+    
+  }
+  // function to switch the color of the lock based on the when the user presses their option.  
+  void switchLock(){
+    setState(() { 
+      locked = !locked;
+        });
+    // siwtching up locked feature on the state of the widget
+
+
+  }
   HomePageState(this.token);
   LatLng posOf = LatLng(10.22, 10.22);
 
 	@override 
 	Widget build(BuildContext context){
 
-    List<Widget> cardList = [];
-
+    List<Widget> bikeItems = [];
+    Future<dynamic> future = getBikesRequest(token);
+    future.then((value) => fixName(value));
+    // do the changing of the name in fixname if the bike name hasn't been changed
+  
     //-------------------------------------------------------------- Zero Card ---------------------------------------------------
-    var zeroCard = new RawMaterialButton(
+    var lockButton = new RawMaterialButton(
       onPressed: () {
         // locking vs unlocking bike
         putBikeState(token);
+        // change state
+        switchLock();
+
       },
-    
+
         child: new Icon(
-          Icons.lock_open,
-          // Icons.lock,
+
+          this.locked ? Icons.lock : Icons.lock_open,
+          //Icons.lock,
           color: Colors.white,
           size: 150.0,
         ),
         shape: new CircleBorder(),
         elevation: 2.0,
-        fillColor: Colors.green,
+        fillColor: this.locked ? Colors.red : Colors.green,
+        splashColor: this.locked ? Colors.red[100]: Colors.green[100],
         // fillColor: Colors.red,
         padding: const EdgeInsets.all(30.0),
     );
 
-    final zeroSizedBox = new Container(
+    final lockButtonContainer = new Container(
       margin: new EdgeInsets.only(top: 10.0, left: 10.0, right: 10.0),
-      child: new SizedBox(child: zeroCard,)
+      child: new SizedBox(child: lockButton)
     );
 
-    cardList.add(zeroSizedBox);
-//----------------------------------------------------------- ^^ Zero Card ^^ ------------------------------------------------
+    bikeItems.add(lockButtonContainer);
+    // container 
+    var bikeMapLabel = new Text(name, style: TextStyle(color: Colors.black, fontSize: 20.0),);
 
-//-------------------------------------------------------------- First Card ---------------------------------------------------
+    final bikeMapLabelContainer = new Container(
+      margin: new EdgeInsets.only(top: 10.0, left: 10.0, right: 10.0),
+      child: new SizedBox(child: bikeMapLabel)
+
+    );
+    bikeItems.add(bikeMapLabelContainer);
+
     var card = new Card(
       child: InkWell(
         splashColor: Colors.green,
@@ -118,17 +175,16 @@ class HomePageState extends State<HubPage>{
 
     final sizedBox = new Container(
       margin: new EdgeInsets.only(top: 10.0, left: 10.0, right: 10.0),
-      child: new SizedBox(child: card,)
+      child: new SizedBox(child: card)
     );
 
-    cardList.add(sizedBox);
-//----------------------------------------------------------- ^^ First Card ^^ ------------------------------------------------
+    bikeItems.add(sizedBox);
+
 
 		return new Scaffold(
       appBar: new AppBar(
             title: new Text("Bike Buddy"),
       ),
-
        drawer: new Drawer(
         child: new ListView(
           children: <Widget> [
@@ -165,16 +221,10 @@ class HomePageState extends State<HubPage>{
       body:  new Stack(
         fit: StackFit.expand,
         children: <Widget>[
-          new Positioned(
-            child: new Material(
-              color:Colors.white,
-              child: new ListView(
-                shrinkWrap: true,
-                padding: const EdgeInsets.all(25.0),
-                children: cardList,
-              )
-            )
-          ), 
+          new Column(
+            children: bikeItems,
+          ),
+          
         ]
       ),
     );
