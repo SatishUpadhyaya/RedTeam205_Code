@@ -16,6 +16,8 @@
         android:name="io.flutter.app.FlutterApplication"
         android:label="bikebuddy"
         android:icon="@mipmap/ic_launcher">
+        <meta-data android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyCwINJgeOTunZLxJK3TToJ067UFKaB_bZM"/>
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"
