@@ -7,6 +7,11 @@ import '../../landingComp/Pages/login.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import './maps.dart';
 
+// function to use the readings from the gps sensor to determine the placement on the map for the user's bike.
+
+
+
+
 // get the bikes that this current user has upon login
 Future<dynamic> getBikesRequest(var token) async {
     // print("Got:" + tokenMane["token"].toString());
@@ -165,16 +170,10 @@ class HomePageState extends State<HubPage>{
       body:  new Stack(
         fit: StackFit.expand,
         children: <Widget>[
-          new Positioned(
-            child: new Material(
-              color:Colors.white,
-              child: new ListView(
-                shrinkWrap: true,
-                padding: const EdgeInsets.all(25.0),
-                children: cardList,
-              )
-            )
-          ), 
+          new Column(
+            children: cardList,
+          ),
+          
         ]
       ),
     );
