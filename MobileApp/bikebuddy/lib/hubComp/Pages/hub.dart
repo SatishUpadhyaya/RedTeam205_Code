@@ -2,75 +2,77 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
+
 import '../../landingComp/Pages/login.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import './maps.dart';
 
-Future<dynamic> getBikesRequest(var tokenMane) async {
+// get the bikes that this current user has upon login
+Future<dynamic> getBikesRequest(var token) async {
     // print("Got:" + tokenMane["token"].toString());
-		String url = "http://bikebuddy.udana.systems/bikes";
-
-    var header = {"Authorization":"Token "+tokenMane["token"]};
-    print(header);
-
+		String url = "https://bikebuddy.udana.systems/bikes";
+    var header = {"Authorization":"Token "+token["token"],
+    "Accept": "application/json",
+    "content-type": "application/json"};
 		var response = await http.get(Uri.encodeFull(url), headers: header);
-		print(response.body);
-
-    Map<dynamic, dynamic> respD = json.decode(response.body);
-    print(respD["Bikes"][0]);
-
-    return respD["Bikes"][0];
-	}
-
-  Future<void> putBikeState(var tokenMane) async {
-    // print("Got:" + tokenMane["token"].toString());
-		String url = "http://bikebuddy.udana.systems/bikes";
-    String secURL = "http://bikebuddy.udana.systems/bikes/changeBike";
-    var header = {"Authorization":"Token "+tokenMane["token"]};
-    print(header);
-
-		var response = await http.get(Uri.encodeFull(url), headers: header);
-		print(response.body);
-
-    Map<dynamic, dynamic> respD = json.decode(response.body);
-    
-    var bikeName = respD["Bikes"][0]["Name"];
-    var bikeState = respD["Bikes"][0]["State"];
-    dynamic latLng = respD["Bikes"][0]["LatLng"];
-
-    print(bikeName);
-    print(bikeState);
-    print(latLng);
-
-    if(bikeState == "armed")
-    {
-      //put state as disarmed
-      var bod = {"Name":bikeName.toString(),"lat":latLng[0].toDouble(),"lng":latLng[1].toDouble(),"state":"disarmed"};
-      print(bod);
-      await http.put(Uri.encodeFull(secURL), body: json.encode(bod), headers: header);
-      print("State changed to disarmed");
+    if(response.statusCode == 200){
+      Map<dynamic, dynamic> respD = json.decode(response.body);
+      print(respD["Bikes"][0]);
+      return respD["Bikes"][0];
     }
-    else
-    {
-      //put state as armed
-      var bod = {"Name":bikeName.toString(),"lat":latLng[0].toDouble(),"lng":latLng[1].toDouble(),"state":"armed"};
-      print(bod);
-      await http.put(Uri.encodeFull(secURL), body: json.encode(bod), headers: header);
-      print("State changed to armed");
+    else{
+      print("Something went wrong...");
+      return 0;
     }
 	}
+
+Future<void> putBikeState(var token) async {
+  // print("Got:" + tokenMane["token"].toString());
+  String url = "https://bikebuddy.udana.systems/bikes";
+  String secURL = "https://bikebuddy.udana.systems/bikes/changeBike";
+  var header = {"Authorization":"Token "+token["token"],
+    "Accept": "application/json",
+    "content-type": "application/json"};
+
+  var response = await http.get(Uri.encodeFull(url), headers: header);  
+
+  Map<dynamic, dynamic> respD = json.decode(response.body);
+  
+  var bikeName = respD["Bikes"][0]["Name"];
+  var bikeState = respD["Bikes"][0]["State"];
+  dynamic latLng = respD["Bikes"][0]["LatLng"];
+  int index;
+  List<String> statusi = ["armed", "disarmed"];
+  if(bikeState == "armed"){
+    index = 1;
+  }
+  else{
+    index = 0;
+  }
+  var body = {"Name":bikeName.toString(),"lat":latLng[0].toDouble(),"lng":latLng[1].toDouble(),"state":statusi[index]};
+  var secondRep = await http.put(Uri.encodeFull(secURL), body: json.encode(body), headers: header);
+  print(secondRep.statusCode);
+  print(secondRep.reasonPhrase);
+  if(secondRep.statusCode == 200){
+    print("State changed to " + statusi[index] + "!");
+
+  }
+  else{
+    print("Something went wrong...");
+  }
+  // later have code for other states.
+}
 
 class HubPage extends StatefulWidget{
-  final tokenMane;
-  HubPage(this.tokenMane);
-
+  final token;
+  HubPage(this.token);
   @override
-  State createState() => new HomePageState(tokenMane);
+  State createState() => new HomePageState(token);
 }
 
 class HomePageState extends State<HubPage>{
-  final tokenMane;
-  HomePageState(this.tokenMane);
+  final token;
+  HomePageState(this.token);
   LatLng posOf = LatLng(10.22, 10.22);
 
 	@override 
@@ -81,7 +83,8 @@ class HomePageState extends State<HubPage>{
     //-------------------------------------------------------------- Zero Card ---------------------------------------------------
     var zeroCard = new RawMaterialButton(
       onPressed: () {
-        putBikeState(tokenMane);
+        // locking vs unlocking bike
+        putBikeState(token);
       },
     
         child: new Icon(
@@ -109,19 +112,7 @@ class HomePageState extends State<HubPage>{
     var card = new Card(
       child: InkWell(
         splashColor: Colors.green,
-        child: new Column(
-          children: <Widget>[
-            new ListTile(
-              leading: new Icon(Icons.looks),
-              title: new Text("My Bike's Location"),
-              trailing: new Icon(Icons.looks),
-            ),
-            MapsDemo(posOf),
-          ]
-        ),
-        onTap: () {
-                // getPostDrone(context, userToken);
-              },
+        child: MapsDemo(posOf)
       )
     );
 
