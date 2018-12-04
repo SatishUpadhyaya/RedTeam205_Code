@@ -3,20 +3,33 @@ import 'package:flutter/material.dart';
 
 class MapsDemo extends StatefulWidget {
   final LatLng position;
+  final bool isLocked;
+  final String label;
+  
 
-  MapsDemo(this.position);
+  MapsDemo(this.position, this.isLocked, this.label);
 
   @override
   State createState() => MapsDemoState();
 }
 
 class MapsDemoState extends State<MapsDemo> {
-
-  GoogleMapController mapController;
   
+  GoogleMapController mapController;
   @override
   Widget build(BuildContext context) {
-    
+    // rebuilds everytime
+    if (mapController != null){
+      print(widget.label);
+      mapController.clearMarkers();
+      mapController.addMarker(MarkerOptions(
+        position: widget.position,
+      icon: BitmapDescriptor.defaultMarkerWithHue(
+        widget.isLocked ? BitmapDescriptor.hueRed : BitmapDescriptor.hueGreen),
+        infoWindowText: InfoWindowText(widget.label, "bike")));
+      
+    }
+  
     return Padding(
       padding: EdgeInsets.fromLTRB(0.0,15.0,0.0,0.0),
       child: Column(
@@ -34,7 +47,9 @@ class MapsDemoState extends State<MapsDemo> {
                 scrollGesturesEnabled: true,
                 zoomGesturesEnabled: true,
                 rotateGesturesEnabled: true,
-                trackCameraPosition: true),
+                trackCameraPosition: true,
+                compassEnabled: true),
+
               ),
             ),
           ),
@@ -45,8 +60,17 @@ class MapsDemoState extends State<MapsDemo> {
   }
 
   void _onMapCreated(GoogleMapController controller) {
+    print(widget.isLocked);
+    
     setState(() { mapController = controller; 
-      controller.addMarker(MarkerOptions(position: widget.position));
+      controller.addMarker(MarkerOptions(
+        position: widget.position,
+      icon: BitmapDescriptor.defaultMarkerWithHue(
+        widget.isLocked ? BitmapDescriptor.hueRed : BitmapDescriptor.hueGreen),
+      infoWindowText: InfoWindowText(widget.label, "bike")
+
+
+        ));
      });
   }
 }
