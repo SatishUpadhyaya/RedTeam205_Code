@@ -9,10 +9,14 @@ import './maps.dart';
 
 // function to use the readings from the gps sensor to determine the placement on the map for the user's bike.
 
+
 Future<void> updatePosition(var token) async{
-  // based on position from api, update the google map and 
-  // google map controller.
   
+  // based on position from api, update the google map and 
+  // google map controller. Rebuild the google map controller to 
+  // display where the marker is and also have the correct color (based on status)
+
+
 
 }
 
@@ -27,6 +31,8 @@ Future<dynamic> getBikesRequest(var token) async {
     if(response.statusCode == 200){
       Map<dynamic, dynamic> respD = json.decode(response.body);
       print(respD["Bikes"][0]);
+      print("meme");
+      
       return respD["Bikes"][0];
     }
     else{
@@ -77,15 +83,56 @@ class HubPage extends StatefulWidget{
   HubPage(this.token);
   @override
   State createState() => new HomePageState(token);
+
+
 }
-
-
+void changeCoordinates(var token, State stater){
+    Future<dynamic> received = getBikesRequest(token);
+    received.then((value) => value);
+  }
 
 class HomePageState extends State<HubPage>{
+  
+  Timer timer;
   final token;
+  LatLng position = LatLng(10.22, 10.22);
+  // current coordinates of the bike
   String name = "";
   bool nameFound = false;
   bool locked = false;
+
+  void changePosition(){
+    Future<dynamic> received = getBikesRequest(token);
+    received.then((value) =>
+    setState((){
+      var coords = value["LatLng"];
+      position = LatLng(coords[0], coords[1]);
+      print("New position is " + position.toString());
+    })
+    );
+    
+  }
+  @override
+    void initState() {
+      // TODO: implement initState
+      super.initState();
+      
+      timer = Timer.periodic(Duration(seconds: 5), (Timer t) =>
+      this.changePosition()
+      );
+      // rebuild the widget every five seconds by calling the set state function
+
+      // when value is received via the get request, need to call a function to set state
+      // every n seconds, be able to update the timer
+      // need to get the bike's latitude/longitude through the previous function
+    }
+  @override
+    void dispose() {
+        // TODO: implement dispose
+        timer?.cancel();
+        super.dispose();
+      }
+  
   void fixName(bike){
     if(!nameFound){
       // first time getting stats of the bike
@@ -94,37 +141,40 @@ class HomePageState extends State<HubPage>{
           String status = bike["State"];
           if(status == "armed"){
             locked = true;
-
           }
           else{
             locked = false;
-
           }
           nameFound = true;
         });
     }
-    
+  }
+
+  void newPosition(){
+
   }
   // function to switch the color of the lock based on the when the user presses their option.  
   void switchLock(){
     setState(() { 
       locked = !locked;
         });
-    // siwtching up locked feature on the state of the widget
-
-
+    // switching up locked feature on the state of the widget
   }
   HomePageState(this.token);
-  LatLng posOf = LatLng(10.22, 10.22);
 
 	@override 
 	Widget build(BuildContext context){
+    // rebuilds every time setState function is called - that way we can update the positions of the bike every 5 seconds
+    // new mapsdemo object, takes in new location as a parameter based on where the bike is.
+    MapsDemo map  = MapsDemo(position, locked, name);
+    print(position);
+    map.createState();
+    // create updated state of the map
 
     List<Widget> bikeItems = [];
     Future<dynamic> future = getBikesRequest(token);
     future.then((value) => fixName(value));
     // do the changing of the name in fixname if the bike name hasn't been changed
-  
     //-------------------------------------------------------------- Zero Card ---------------------------------------------------
     var lockButton = new RawMaterialButton(
       onPressed: () {
@@ -134,7 +184,6 @@ class HomePageState extends State<HubPage>{
         switchLock();
 
       },
-
         child: new Icon(
 
           this.locked ? Icons.lock : Icons.lock_open,
@@ -169,7 +218,8 @@ class HomePageState extends State<HubPage>{
     var card = new Card(
       child: InkWell(
         splashColor: Colors.green,
-        child: MapsDemo(posOf)
+        // when rebuilt after being changed, fix this
+        child: map
       )
     );
 
@@ -182,6 +232,7 @@ class HomePageState extends State<HubPage>{
 
 
 		return new Scaffold(
+      //backgroundColor: Colors.grey,
       appBar: new AppBar(
             title: new Text("Bike Buddy"),
       ),
