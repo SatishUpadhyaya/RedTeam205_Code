@@ -2,8 +2,35 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
 import './login.dart';
+import 'dart:convert';
 
-Future<void> getPost(BuildContext context, dynamic name, dynamic password, dynamic email) async
+Future<void> addBike(dynamic username, dynamic password, dynamic bikeName) async
+{
+    try
+    {
+      //Login
+      var bodTx = {"username":username.toString(), "password":password.toString()};
+      final res = await http.post('https://bikebuddy.udana.systems/api/login', body: bodTx,);
+
+      //Get the token
+      var resDecode = json.decode(res.body);
+      print("\""+resDecode["token"]+"\"");
+      var header = {"Authorization":"Token "+resDecode["token"].toString(),
+        "Accept": "application/json",
+        "content-type": "application/json"};
+      var bodyMane = json.encode({"Name":bikeName.toString()});
+      print(bodyMane);
+      //Add the bike
+      final req = await http.post('https://bikebuddy.udana.systems/bikes/addBike', headers: header, body: bodyMane,);
+      print(json.decode(req.body));
+    }
+    catch(e)
+    {
+      print("Unable to add bike because of " + e.toString());
+    }
+}
+
+Future<void> getPost(BuildContext context, dynamic name, dynamic password, dynamic email, dynamic bikeName) async
 {
   var bodyText = {"username":name.toString(),"password":password.toString(),"email":email.toString()};
 
@@ -11,6 +38,7 @@ Future<void> getPost(BuildContext context, dynamic name, dynamic password, dynam
 
   if(res.statusCode == 200)
   {
+    addBike(name, password, bikeName);
     return showDialog<Null>(
       context: context,
       barrierDismissible: false,
@@ -58,7 +86,11 @@ Future<void> getPost(BuildContext context, dynamic name, dynamic password, dynam
             new FlatButton(
               child: new Text('Try Again'),
               onPressed: () {
-                Navigator.of(context).pop();
+                //Navigator.of(context).pop();
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => new SignUpPage()),
+                );
               },
             ),
           ],
@@ -80,6 +112,7 @@ class SignUpPageState extends State<SignUpPage> with SingleTickerProviderStateMi
   String userName = "";
   String userPassword = "";
   String userEmail = "";
+  String bikeName = "";
 
   @override
   void initState()
@@ -149,6 +182,7 @@ class SignUpPageState extends State<SignUpPage> with SingleTickerProviderStateMi
                     children: <Widget>[
                       new Container(
                         width: 225.0,
+                        height: 50.0,
                         child: new TextField(
                             decoration: new InputDecoration(
                               labelText: "Username",
@@ -164,6 +198,7 @@ class SignUpPageState extends State<SignUpPage> with SingleTickerProviderStateMi
                       ),
                       new Container(
                         width: 225.0,
+                        height: 50.0,
                         child: new TextField(
                           decoration: new InputDecoration(
                             labelText: "Password",
@@ -179,6 +214,7 @@ class SignUpPageState extends State<SignUpPage> with SingleTickerProviderStateMi
                       ),
                       new Container(
                         width: 225.0,
+                        height: 50.0,
                         child: new TextField(
                           decoration: new InputDecoration(
                             labelText: "Email",
@@ -191,8 +227,23 @@ class SignUpPageState extends State<SignUpPage> with SingleTickerProviderStateMi
                           keyboardType: TextInputType.text,
                         ),
                       ),
+                      new Container(
+                        width: 225.0,
+                        height: 50.0,
+                        child: new TextField(
+                          decoration: new InputDecoration(
+                            labelText: "Bike Name",
+                          ),
+                          onChanged: (String inBikeName){
+                            setState((){
+                              bikeName = inBikeName;
+                            });
+                          },
+                          keyboardType: TextInputType.text,
+                        ),
+                      ),
                       new Padding(
-                        padding: const EdgeInsets.only(top: 25.0),
+                        padding: const EdgeInsets.only(top: 18.0),
                       ),
                       new MaterialButton(
                         height: 30.0,
@@ -205,13 +256,13 @@ class SignUpPageState extends State<SignUpPage> with SingleTickerProviderStateMi
                           ),),
                         onPressed: () {
                           // function to post user credentials to API
-                          getPost(context, userName.toString(), userPassword.toString(), userEmail.toString());
+                          getPost(context, userName.toString(), userPassword.toString(), userEmail.toString(), bikeName.toString());
                         },
                         splashColor: Colors.black,
                       ),
 
                       new Padding(
-                        padding: const EdgeInsets.only(top: 25.0),
+                        padding: const EdgeInsets.only(top: 18.0),
                       ),
 
                     ]

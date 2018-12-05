@@ -21,7 +21,10 @@ Future<void> getPost(BuildContext context, dynamic email, dynamic password) asyn
   if(res.statusCode == 200)
   {
     //should pass at least the resDecode to the HubPage()
-    
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => new HubPage(resDecode)),
+    );
   }
   else
   {
@@ -224,4 +227,4 @@ class LoginPageState extends State<LoginPage> with SingleTickerProviderStateMixi
   }
 
 
-}// placeholder
+}
