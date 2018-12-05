@@ -3,6 +3,7 @@ import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
 import '../../hubComp/Pages/hub.dart';
+import './signUp.dart';
 
 Future<void> getPost(BuildContext context, dynamic email, dynamic password) async
 {
@@ -20,10 +21,7 @@ Future<void> getPost(BuildContext context, dynamic email, dynamic password) asyn
   if(res.statusCode == 200)
   {
     //should pass at least the resDecode to the HubPage()
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => new HubPage(resDecode)),
-    );
+    
   }
   else
   {
@@ -192,12 +190,17 @@ class LoginPageState extends State<LoginPage> with SingleTickerProviderStateMixi
                       
                       new Container(
                         child: new InkWell(
-                        child: new Text("Forgot Username or Password?",
+                        child: new Text("Sign Up for Bike Buddy",
                         style: new TextStyle(
                           fontSize: 18.0,
                           color: Colors.black,
                         )),
-                        onTap: () {},
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => new SignUpPage()),
+                          );
+                        },
                         ),
                         
                       ),
