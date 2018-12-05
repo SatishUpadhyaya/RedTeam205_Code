@@ -2,7 +2,7 @@
 <ul>
 <li><b>changeAPI_state.py:</b> changes the state of the bike to stolen</li>
   <ul>
-    <li><b>Request(s) performed:</b> put</li>
+    <li><b>Request(s) performed:</b> get and put</li>
   </ul>
   <br>
 <li><b>changeLoc.py:</b> changes location based on the data from the GPS sensor</li>
