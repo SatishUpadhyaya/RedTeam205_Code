@@ -5,9 +5,9 @@ import 'dart:convert';
 import '../../hubComp/Pages/hub.dart';
 import './signUp.dart';
 
-Future<void> getPost(BuildContext context, dynamic email, dynamic password) async
+Future<void> getPost(BuildContext context, dynamic name, dynamic password) async
 {
-  var bodyText = {"username":email.toString(),"password":password.toString()};
+  var bodyText = {"username": name.toString(),"password": password.toString()};
   // var bodyTextJson = json.encode(bodyText);
 
   final res = await http.post('https://bikebuddy.udana.systems/api/login', body: bodyText,);

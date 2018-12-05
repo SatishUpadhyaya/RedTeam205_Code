@@ -8,21 +8,26 @@ Future<void> addBike(dynamic username, dynamic password, dynamic bikeName) async
 {
     try
     {
-      //Login
-      var bodTx = {"username":username.toString(), "password":password.toString()};
-      final res = await http.post('https://bikebuddy.udana.systems/api/login', body: bodTx,);
-
+      // adds a bike for the user
+      var bodTx = {"username": username.toString(), "password": password.toString()};
+      final res = await http.post('https://bikebuddy.udana.systems/api/login', body: bodTx);
       //Get the token
-      var resDecode = json.decode(res.body);
-      print("\""+resDecode["token"]+"\"");
-      var header = {"Authorization":"Token "+resDecode["token"].toString(),
-        "Accept": "application/json",
-        "content-type": "application/json"};
-      var bodyMane = json.encode({"Name":bikeName.toString()});
-      print(bodyMane);
-      //Add the bike
-      final req = await http.post('https://bikebuddy.udana.systems/bikes/addBike', headers: header, body: bodyMane,);
-      print(json.decode(req.body));
+      if(res.statusCode == 200){
+        var resDecode = json.decode(res.body);
+        print("\""+resDecode["token"]+"\"");
+        var header = {"Authorization":"Token "+resDecode["token"].toString(),
+          "Accept": "application/json",
+          "content-type": "application/json"};
+        var body = json.encode({"Name": bikeName.toString()});
+        print(body);
+        //Add the bike
+        final req = await http.post('https://bikebuddy.udana.systems/bikes/addBike', headers: header, body: body);
+        print(json.decode(req.body));
+      }
+      else{
+        print("Something went wrong...");
+      }
+     
     }
     catch(e)
     {
@@ -32,13 +37,23 @@ Future<void> addBike(dynamic username, dynamic password, dynamic bikeName) async
 
 Future<void> getPost(BuildContext context, dynamic name, dynamic password, dynamic email, dynamic bikeName) async
 {
+  // takes inputs from the user based on the 
+  bool failed = false;
+  bool invalidEmail = !(RegExp(r"^[a-zA-Z0-9.]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(email.toString()));
+  print(invalidEmail);
+  // simple regex expression to look for correct form for emails.
+  if(name == "" || password == "" || email == "" || bikeName == "" || invalidEmail){
+    failed = true;
+  }
+  // can't add in an empty bike to the user's account!
   var bodyText = {"username":name.toString(),"password":password.toString(),"email":email.toString()};
 
-  final res = await http.post('https://bikebuddy.udana.systems/api/createacc', body: bodyText,);
+  final res = await http.post('https://bikebuddy.udana.systems/api/createacc', body: bodyText);
 
-  if(res.statusCode == 200)
+  if(res.statusCode == 200 && !(invalidEmail))
   {
-    addBike(name, password, bikeName);
+    // if there's a good response and the email is valid
+    await addBike(name, password, bikeName);
     return showDialog<Null>(
       context: context,
       barrierDismissible: false,
@@ -67,8 +82,9 @@ Future<void> getPost(BuildContext context, dynamic name, dynamic password, dynam
       },
     );
   }
-  else
+  else if(res.statusCode != 200 || failed)
   {
+    // either response code is bad or there was no input there
     return showDialog<Null>(
       context: context,
       barrierDismissible: false,
@@ -78,7 +94,7 @@ Future<void> getPost(BuildContext context, dynamic name, dynamic password, dynam
           content: new SingleChildScrollView(
             child: new ListBody(
               children: <Widget>[
-                new Text('Invalid Username, Password, or Email'),
+                new Text('Error with Password, Email, and/or Username.'),
               ],
             ),
           ),
@@ -224,7 +240,7 @@ class SignUpPageState extends State<SignUpPage> with SingleTickerProviderStateMi
                               userEmail = inEmail;
                             });
                           },
-                          keyboardType: TextInputType.text,
+                          keyboardType: TextInputType.emailAddress,
                         ),
                       ),
                       new Container(
@@ -232,7 +248,7 @@ class SignUpPageState extends State<SignUpPage> with SingleTickerProviderStateMi
                         height: 50.0,
                         child: new TextField(
                           decoration: new InputDecoration(
-                            labelText: "Bike Name",
+                            labelText: "New Bike Name",
                           ),
                           onChanged: (String inBikeName){
                             setState((){

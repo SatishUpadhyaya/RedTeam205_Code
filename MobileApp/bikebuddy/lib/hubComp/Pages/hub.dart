@@ -7,15 +7,12 @@ import '../../landingComp/Pages/login.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import './maps.dart';
 
-// todo - implement ability to add the user's bike
-
 // todo - implement other states aside from locked, unlocked
 // states:
 // disarmed
 // armed
 // unknown
 // stolen
-
 
 // both futures will catch error (many possible ones) if there's an issue with put or get for each function
 // get the bikes that this current user has upon login
@@ -63,31 +60,34 @@ Future<void> putBikeState(var token) async {
     var bikeState = respD["Bikes"][0]["State"];
     dynamic latLng = respD["Bikes"][0]["LatLng"];
     int index;
-    List<String> statusi = ["armed", "disarmed"];
-    if(bikeState == "armed"){
-      index = 1;
-    }
-    else{
+    List<String> statusi = ["disarmed", "armed"];
+
+    // 0 - unlocked
+  // 1 - locked, safe
+  // 2 - stolen
+  // 3 - unknown
+    if(bikeState == "armed" || bikeState == "Unknown"){
       index = 0;
     }
+    else if(bikeState == "disarmed"){
+      index = 1;
+    }
+
     var body = {"Name":bikeName.toString(),"lat":latLng[0].toDouble(),"lng":latLng[1].toDouble(),"state":statusi[index]};
     var secondRep = await http.put(Uri.encodeFull(secURL), body: json.encode(body), headers: header);
     print(secondRep.statusCode);
     print(secondRep.reasonPhrase);
     if(secondRep.statusCode == 200){
       print("State changed to " + statusi[index] + "!");
-
     }
     else{
       print("Something went wrong, your request did not succeed. Try again.");
     }
-
   }
   catch(e){
     print("Oh no.");
     print(e.toString());
   }
-  
   // later have code for other states.
 }
 
@@ -102,7 +102,7 @@ class HomePageState extends State<HubPage>{
   
   Timer timer;
   final token;
-  LatLng position = LatLng(10.22, 10.22);
+  LatLng position = LatLng(40, 105);
   // current coordinates of the bike
   String name = "";
   bool nameFound = false;
@@ -116,14 +116,29 @@ class HomePageState extends State<HubPage>{
     print("Nothing will happen");
   }
   void changeMapPosition(){
+    // every n seconds, gets the user input and update and check for stolen biker
+    // we don't want to change the state here unless the bike is seen to be marked as stolen.
     Future<dynamic> received = getBikesRequest(token);
     // take care of when getBikesRequest returns 0 
     received.then((value) =>
     setState((){
-      var coords = value["LatLng"];
-      position = LatLng(coords[0], coords[1]);
-      print("New position is " + position.toString());
+      if(value != 0){
+        var coords = value["LatLng"];
+        position = LatLng(coords[0], coords[1]);
+        print("New position is " + position.toString());
+        if(value["State"] == "stolen"){
+          lockedId = 2;
+          // bike is now seen to be stolen
+          print("Bike is being STOLEN.");
+        }
+      }
+      else{
+        print("There was a wrong status code!");
+      
+      }
+      // otherwise something went wrong
     })
+    
     ).catchError((e) => print(e.toString() + " was the error."));
     
   }
@@ -172,6 +187,7 @@ class HomePageState extends State<HubPage>{
     }
   }
 
+
   // function to switch the color of the lock based on the when the user presses their option.  
   void switchLock(){
     setState(() {
@@ -200,10 +216,12 @@ class HomePageState extends State<HubPage>{
     // new mapsdemo object, takes in new location as a parameter based on where the bike is.
     MapsDemo map = MapsDemo(position, lockedId, name);
     map.createState();
+    // put the bike state as well
     // create updated state of the map
     List<Widget> bikeItems = [];
     Future<dynamic> future = getBikesRequest(token);
-    future.then((value) => fixName(value))
+    future.then((value) => 
+    fixName(value))
     .catchError((e) => print(e.toString() + " was the error."));
     // do the changing of the name in fixname if the bike name hasn't been changed
 
@@ -237,7 +255,7 @@ class HomePageState extends State<HubPage>{
     }
     var lockButton = new RawMaterialButton(
       onPressed: () {
-        // locking vs unlocking bike
+        // changing the state of the bike.
         putBikeState(token);
         // change state, user can't manually make stolen
         switchLock();
