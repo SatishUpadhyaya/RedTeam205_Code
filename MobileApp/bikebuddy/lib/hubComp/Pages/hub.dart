@@ -6,6 +6,7 @@ import 'dart:convert';
 import '../../landingComp/Pages/login.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import './maps.dart';
+import './aboutUs.dart';
 
 // todo - implement other states aside from locked, unlocked
 // states:
@@ -327,9 +328,10 @@ class HomePageState extends State<HubPage>{
             ),
             new ListTile(
               leading: new Icon(Icons.poll, color: Colors.blueAccent),
-              title: new Text('Change Password'),
+              title: new Text('About Us'),
               onTap: () {
-                // getPostOrder(context, userToken);
+                Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => new AboutUsPage()),);
               },
             ),
             new Divider(),
