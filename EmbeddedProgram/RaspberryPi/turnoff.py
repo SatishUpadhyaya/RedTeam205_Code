@@ -1,6 +1,7 @@
 #!/usr/bin/python
 import serial
 import time
+
 x = serial.Serial("/dev/ttyACM0", 115200)
 time.sleep(2)
 #x.write(b'\x32')

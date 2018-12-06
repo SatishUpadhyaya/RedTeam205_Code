@@ -8,6 +8,7 @@ serialRate = 115200
 
 while True:
 	try:
+		print("Serial port opened!")
 		serialport = serial.Serial(port, serialRate, timeout=0.5)
 		break
 	except:
@@ -15,8 +16,8 @@ while True:
 		continue
 
 i = 0
-while i < 100:
-	time.sleep(0.2)
+while i < 10:
+	time.sleep(0.1)
 	s = serialport.read()
 	if s==b'\x01':
 		print("Oh no, bike looks like its being stolen, make HTTPrequest")

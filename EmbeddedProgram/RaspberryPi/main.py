@@ -10,4 +10,4 @@ import os
 
 while True:
 	os.system("/home/pi/bikebuddy/src/scripts/getStat.py")
-	os.system("/home/pi/bikebuddy/src/scripts/changeLoc.py")
+	os.system("sudo /home/pi/bikebuddy/src/scripts/changeLoc.py")
