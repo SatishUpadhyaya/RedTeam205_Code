@@ -330,6 +330,7 @@ class HomePageState extends State<HubPage>{
               leading: new Icon(Icons.poll, color: Colors.blueAccent),
               title: new Text('About Us'),
               onTap: () {
+                timer?.cancel();
                 Navigator.push(context,
                   MaterialPageRoute(builder: (context) => new AboutUsPage()),);
               },
@@ -338,6 +339,7 @@ class HomePageState extends State<HubPage>{
             new ListTile(leading: new Icon(Icons.person_outline, color: Colors.cyan),
               title: new Text('Sign Out'),
               onTap: () {
+                timer?.cancel();
                 Navigator.push(context,
                   MaterialPageRoute(builder: (context) => new LoginPage()),);
               },
