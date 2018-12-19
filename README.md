@@ -28,3 +28,7 @@ The structure of the repo is:
 </ul>
 
 In order to check out the docs and how to build/test/run the code, go to the separate READMEs for each directory mentioned above. 
+
+To clone:
+
+`git clone https://github.com/SatishUpadhyaya/RedTeam205_Code.git`
