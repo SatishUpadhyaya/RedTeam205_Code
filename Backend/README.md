@@ -9,10 +9,15 @@ To Run Locally:
 
 
 List of all endpoints and associated JSON structures:
+
 superuser login:
-username: jptboy
-password: khanal2845
+
+username: `jptboy`
+
+password: `khanal2845`
+
 Login:
+
     - Create account: 
         - REQUEST TYPE: POST
         - url: /api/createacc
@@ -31,6 +36,7 @@ Login:
                       "token": "8bf76be3ec2c04fc197b937de0d72d2cb7037b54"
                     }
 Bike CRUD:
+
     - Get Bikes:
         - Request Type: GET
         - URL: /bikes/
