@@ -17,6 +17,9 @@
 //automated	tests.	 Provide	a	copy	of	the	output	showing	the	results	of	the	
 //automated	test	cases	running.	
 
+// test login
+// sign in 
+// change status
 
 
 
@@ -24,7 +27,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 //import 'package:test/test.dart';
 import 'package:bikebuddy/main.dart';
-
+import '../lib/hubComp/Pages/hub.dart';
 void main() {
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {
     // Build our app and trigger a frame.
@@ -42,4 +45,6 @@ void main() {
     expect(find.text('0'), findsNothing);
     expect(find.text('1'), findsOneWidget);
   });
+
+  
 }
