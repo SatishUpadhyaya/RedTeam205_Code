@@ -79,7 +79,7 @@ Future<dynamic> putBikeStateTest(var token) async {
   }
   // later have code for other states.
 
-
+// function to switch the lock
 
 int switchLockTest(lockedNum){
   if(lockedNum == 3){
@@ -95,6 +95,9 @@ int switchLockTest(lockedNum){
     
 }
 
+
+
+// posts for a login request 
 
 Future<dynamic> getPost(dynamic name, dynamic password) async
 {
@@ -147,10 +150,14 @@ Future<dynamic> signInPost(dynamic name, dynamic password, dynamic email, dynami
 }
 
 void main(){
+
+  // initial test
   test('First unit test', () {
       expect(1, 1);
       // initial testing test 
     });
+
+  // number check, common sense check
 
   test('A common sense check.', () {
     var answer = 42;
@@ -158,6 +165,7 @@ void main(){
   });
 
 
+// testing different inputs for the login function.
   test('Testing out the login function', (){
     Future<dynamic> reception = getPost("poopyBoy", "123");
     reception.then((value) => 
@@ -182,6 +190,7 @@ void main(){
   });
 
 
+/// testing out different inputs for the sign up function
   test('Testing out the sign up function', (){
     Future<dynamic> result = signInPost("Matthew", "002", "matthew.h.strong@gmail.com", "The Punisher");
     result.then((value) =>
@@ -209,6 +218,7 @@ void main(){
 
   });
 
+// testing the lock function
 
   test('Switching the lock tests', () {
     // 3 0 
@@ -243,6 +253,8 @@ void main(){
 
   });
 
+
+// testing the lock functionality function
   test('Testing the Switching Numbers Function', (){
 
     int armedSwitch = fixNameTest("armed");
